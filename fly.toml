@@ -1,0 +1,21 @@
+# Relay proxy para canales IPTV colombianos
+# Desplegado en Fly.io región BOG (Bogotá) para tener IPs colombianas
+
+app = 'animux-relay'
+primary_region = 'gru'  # São Paulo, Brasil — más cercana a Colombia en Fly.io
+
+[build]
+  [build.args]
+    NODE_VERSION = '20'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '256mb'
