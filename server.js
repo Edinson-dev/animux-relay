@@ -67,8 +67,9 @@ app.get('/proxy', async (req, res) => {
       return res.send(rewritten);
     }
 
-    // Stream binario (segmentos .ts)
-    response.body.pipe(res);
+    // Stream binario (segmentos .ts) — convertir Web Stream a Node.js Stream
+    const { Readable } = await import('stream');
+    Readable.fromWeb(response.body).pipe(res);
 
   } catch (err) {
     const isTimeout = err.name === 'AbortError';
