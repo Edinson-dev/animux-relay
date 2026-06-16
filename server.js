@@ -25,11 +25,16 @@ app.get('/proxy', async (req, res) => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
 
+    const fetchHeaders = {
+      'User-Agent': 'VLC/3.0.18 LibVLC/3.0.18',
+      'Accept': '*/*',
+    };
+    
+    if (req.headers['referer']) fetchHeaders['Referer'] = req.headers['referer'];
+    if (req.headers['origin']) fetchHeaders['Origin'] = req.headers['origin'];
+
     const response = await fetch(target, {
-      headers: {
-        'User-Agent': 'VLC/3.0.18 LibVLC/3.0.18',
-        'Accept': '*/*',
-      },
+      headers: fetchHeaders,
       redirect: 'follow',
       signal: controller.signal,
     });
